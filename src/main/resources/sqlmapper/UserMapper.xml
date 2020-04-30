@@ -14,25 +14,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="findList" parameterType="Map" resultType="User">
 		select *
 		from user_login
-		where username like #{username} limit #{offset},#{pageSize}
+		where username like #{username} limit
+		#{offset},#{pageSize}
 	</select>
 	<select id="getTotal" parameterType="Map" resultType="Integer">
-        select count(id)
-        from user_login
-        where username like #{username} 
-    </select>
+		select count(id)
+		from user_login
+		where username like #{username}
+	</select>
 	<update id="add" parameterType="User">
-		insert into user_login(id,username,password)
+		insert into
+		user_login(id,username,password)
 		values(null,#{username},#{password})
 	</update>
 	<update id="edit">
-	update user_login set username=#{username},password=#{password} where id=#{id}
+		update user_login set username=#{username},password=#{password} where
+		id=#{id}
 	</update>
 	<update id="delete" parameterType="long">
-	delete from user_login
-	where id in
-	<foreach item="ids" collection="array" open="(" separator="," close=")">
-            #{ids}
-        </foreach>
+		delete from user_login
+		where id in
+		<foreach item="ids" collection="array" open="(" separator=","
+			close=")">
+			#{ids}
+		</foreach>
 	</update>
 </mapper>

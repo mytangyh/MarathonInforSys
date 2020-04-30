@@ -31,6 +31,7 @@
 			<mvc:exclude-mapping path="/h-ui/**" />
 			<mvc:exclude-mapping path="/easyui/**" />
 			<mvc:exclude-mapping path="/easyui/themes/**" />
+			<mvc:exclude-mapping path="/system/favicon.ico" />
 			<bean class="cn.tang.Marathon.interceptor.LoginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

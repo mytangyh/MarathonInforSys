@@ -17,13 +17,15 @@
 	 var _menus = {"menus":[
 						{"menuid":"1","icon":"","menuname":"数据维护",
 							"menus":[
-									{"menuid":"11","menuname":"用户列表","icon":"icon-exam","url":"../user/list"},
-									{"menuid":"11","menuname":"赛事列表","icon":"icon-exam","url":"ExamServlet?method=toExamListView"}
+									{"menuid":"11","menuname":"用户管理","icon":"icon-exam","url":"../user/list"},
+									{"menuid":"12","menuname":"赛事管理","icon":"icon-exam","url":"../game/list"},
+									{"menuid":"13","menuname":"选手管理","icon":"icon-exam","url":"../player/list"}
 								]
 						},
 						{"menuid":"2","icon":"","menuname":"信息查询",
 							"menus":[
-									{"menuid":"21","menuname":"赛事列表","icon":"icon-user-student","url":"StudentServlet?method=toStudentListView"},
+									{"menuid":"21","menuname":"赛事查询","icon":"icon-search","url":"../game/list"},
+									{"menuid":"22","menuname":"选手查询","icon":"icon-search","url":"../player/list"}
 								]
 						},
 						{"menuid":"3","icon":"","menuname":"信息统计",
@@ -31,13 +33,7 @@
 									{"menuid":"31","menuname":"图表显示","icon":"icon-user-teacher","url":"TeacherServlet?method=toTeacherListView"},
 								]
 						},
-						/* {"menuid":"4","icon":"","menuname":"基础信息管理",
-							"menus":[
-									{"menuid":"41","menuname":"年级列表","icon":"icon-world","url":"GradeServlet?method=toGradeListView"},
-									{"menuid":"42","menuname":"班级列表","icon":"icon-house","url":"ClazzServlet?method=toClazzListView"},
-									{"menuid":"43","menuname":"课程列表","icon":"icon-book-open","url":"CourseServlet?method=toCourseListView"}
-								]
-						}, */
+					
 						{"menuid":"4","icon":"","menuname":"系统管理",
 							"menus":[
 							        {"menuid":"41","menuname":"系统设置","icon":"icon-set","url":"SystemServlet?method=toAdminPersonalView"},

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tang.Marathon.dao.GameDao">
+	<select id="findAll" resultType="Game">
+		select * from game_inf
+	</select>
+	<select id="findList" parameterType="Map" resultType="Game">
+		select * from game_inf where 1=1
+		<if test="game_name !=null">
+			and game_name like #{game_name}
+		</if>
+		<if test="game_type !=null">
+			and game_type = #{game_type}
+		</if>
+		<if test="game_num !=null">
+			and game_num = #{game_num}
+		</if>
+		<if test="game_unit !=null">
+			and game_unit like #{game_unit}
+		</if>
+		<if test="game_location !=null">
+			and game_location like #{game_location}
+		</if>
+		limit #{offset},#{pageSize}
+	</select>
+	<select id="getTotal" parameterType="Map" resultType="Integer">
+        select count(game_id) from game_inf where 1=1
+        <if test="game_name !=null">
+            and game_name like #{game_name}
+        </if>
+        <if test="game_type !=null">
+            and game_type = #{game_type}
+        </if>
+        <if test="game_num !=null">
+            and game_num= #{game_num}
+        </if>
+        <if test="game_unit !=null">
+            and game_unit like #{game_unit}
+        </if>
+        <if test="game_location !=null">
+            and game_location like #{game_location}
+        </if>
+    </select>
+	<update id="addGame" parameterType="Game">
+		insert into game_inf(game_id,game_name,game_type,game_begintime,
+		game_endtime,game_num,game_unit,game_location,game_remakes)
+		values(null,#{game_name},#{game_type},#{game_begintime},
+		#{game_endtime},#{game_num},#{game_unit},#{game_location},#{game_remakes})
+	</update>
+    <update id="editGame">
+        update game_inf set game_name=#{game_name},game_type=#{game_type},
+        game_begintime=#{game_begintime},game_endtime=#{game_endtime},game_num=#{game_num},
+        game_unit=#{game_unit},game_location=#{game_location},game_remakes=#{game_remakes}
+        where game_id=#{game_id}
+    </update>
+    <update id="deleteGame" parameterType="int">
+        delete from game_inf
+        where game_id in
+        <foreach item="ids" collection="array" open="(" separator=","
+            close=")">
+            #{ids}
+        </foreach>
+    </update>
+</mapper>
