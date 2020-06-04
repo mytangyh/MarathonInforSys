@@ -18,7 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import cn.tang.Marathon.pojo.Admin;
+import cn.tang.Marathon.pojo.PlayerLogin;
 import cn.tang.Marathon.pojo.User;
+import cn.tang.Marathon.service.AdminService;
+import cn.tang.Marathon.service.PlayerService;
 import cn.tang.Marathon.service.UserService;
 import cn.tang.Marathon.util.CpachaUtil;
 
@@ -27,6 +31,10 @@ import cn.tang.Marathon.util.CpachaUtil;
 public class SystemController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private PlayerService playerService;
+	@Autowired
+	private AdminService adminService;
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView index(ModelAndView model) {
 		model.setViewName("system/main");
@@ -47,7 +55,12 @@ public class SystemController {
 
 		return model;
 	}
+	@RequestMapping(value = "/login_out", method = RequestMethod.GET)
+	public String loginout(HttpServletRequest request) {
+		request.getSession().setAttribute("user",null);
 
+		return "redirect:login";
+	}
 	/**
 	 * 登录表单提交
 	 * 
@@ -92,8 +105,28 @@ public class SystemController {
 		}
 		request.getSession().setAttribute("loginCpacha", null);
 		//操作数据库
-		User user = userService.findByUserName(username);
 		if (type==1) {//管理员
+			Admin admin = adminService.findByUserName(username);
+			if (admin==null) {
+				ret.put("type", "error");
+				ret.put("msg", "用户不存在");
+				return ret;
+			}
+			if (!password.equals(admin.getPassword())) {
+				ret.put("type", "error");
+				ret.put("msg", "密码错误");
+				return ret;
+			}
+			User user = new User();
+			user.setUsername(admin.getUsername());
+			user.setPassword(admin.getPassword());
+			request.getSession().setAttribute("user", user);
+			request.getSession().setAttribute("admin",admin);
+			
+			
+		}
+		if (type==3) {//主办方
+			User user = userService.findByUserName(username);
 			if (user==null) {
 				ret.put("type", "error");
 				ret.put("msg", "用户不存在");
@@ -107,11 +140,28 @@ public class SystemController {
 			request.getSession().setAttribute("user", user);
 		}
 		
-		System.out.println(username);
+		//System.out.println(username);
 		if (type==2) {
 			//选手
+			PlayerLogin login = playerService.findByUserName(username);
+			if (login==null) {
+				ret.put("type", "error");
+				ret.put("msg", "用户不存在");
+				return ret;
+			}
+			if (!password.equals(login.getPlayer_password())) {
+				ret.put("type", "error");
+				ret.put("msg", "密码错误");
+				return ret;
+			}
+			
+			User user = new User();
+			user.setUsername(login.getPlayer_username());
+			user.setPassword(login.getPlayer_password());
+			request.getSession().setAttribute("user", user);
+			request.getSession().setAttribute("play", login);
 		}
-		
+		request.getSession().setAttribute("userType", type);
 		ret.put("type", "success");
 		ret.put("msg", "登陆成功");
 		return ret;

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tang.Marathon.dao.PlayerDao">
+<resultMap type="PlayerLogin" id="BaseResultMap">
+<id column="player_id" jdbcType="INTEGER" property="player_id"></id>
+<result column="player_username" jdbcType="VARCHAR" property="player_username"/>
+<result column="player_password" jdbcType="VARCHAR" property="player_password"/>
+<association property="playerInf" javaType="Player">
+<id property="player_id" column="player_id"/>
+<result property="player_name" column="player_name"/>
+<result property="player_sex" column="player_sex"/>
+<result property="player_birthday" column="player_birthday"/>
+<result property="player_email" column="player_email"/>
+<result property="player_address" column="player_address"/>
+<result property="player_remake" column="player_remake"/>
+</association>
+</resultMap>
+<select id="findList"  parameterType="Map" resultMap="BaseResultMap">
+select pl.*,pi.player_id,pi.player_name,pi.player_sex,pi.player_birthday,pi.player_email,pi.player_address,pi.player_remake
+from player_login pl left join player_inf pi on pl.player_id=pi.player_id
+where pl.player_username like #{username} limit
+        #{offset},#{pageSize}
+</select>
+<!--  
+<select id="findList" parameterType="Map" resultType="Player">
+        select *
+        from player_login
+        where player_username like #{username} limit
+        #{offset},#{pageSize}
+    </select>-->
+    <select id="getTotal" parameterType="Map" resultType="Integer">
+        select count(player_id)
+        from player_login
+        where player_username like #{username}
+    </select>
+	<select id="findByUserName" parameterType="String"
+        resultType="PlayerLogin">
+        select *
+        from player_login
+        where player_username=#{username}
+
+    </select>
+	
+	
+	<update id="addPlayerLogin" parameterType="PlayerLogin" useGeneratedKeys="true" keyProperty="player_id">
+		insert into
+		player_login(player_username,player_password)
+		values(#{player_username},#{player_password})
+	</update>
+	<update id="addPlayerInfo" parameterType="Player" >
+        insert into
+        player_inf(player_id,player_name,player_sex,player_birthday,player_email,player_address,player_remake)
+        values(#{player_id},#{player_name},#{player_sex},#{player_birthday},#{player_email},#{player_address},#{player_remake})
+    </update>
+	<select id="findAll" resultType="PlayerLogin">
+        select * from player_login
+    </select>
+    <update id="editPlayerLogin">
+    update player_login set player_password = #{player_password} 
+    where player_id=#{player_id}
+    
+    </update>
+    <update id="editPlayerInf">
+     update player_inf set player_name=#{player_name},player_sex=#{player_sex},player_birthday=#{player_birthday},
+     player_email=#{player_email},player_address=#{player_address},player_remake=#{player_remake}
+    where player_id=#{player_id}
+    </update>
+    <update id="deleteLogin" parameterType="long">
+        delete from player_login
+        where player_id in
+        <foreach item="ids" collection="array" open="(" separator=","
+            close=")">
+            #{ids}
+        </foreach>
+    </update>
+    <update id="deleteInf" parameterType="long">
+        delete from player_inf
+        where player_id in
+        <foreach item="ids" collection="array" open="(" separator=","
+            close=")">
+            #{ids}
+        </foreach>
+    </update>
+    
+</mapper>

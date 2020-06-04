@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tang.Marathon.dao.NoticeDao">
+<select id="findAll" resultType="Notice">
+select * from notice
+</select>
+	<select id="findList" parameterType="Map" resultType="Notice">
+        select *
+        from notice
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="getTotal" parameterType="Map" resultType="Integer">
+        select count(notice_id)
+        from notice
+    </select>
+</mapper>

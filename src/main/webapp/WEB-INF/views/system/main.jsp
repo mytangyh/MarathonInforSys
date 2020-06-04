@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -17,15 +18,23 @@
 	 var _menus = {"menus":[
 						{"menuid":"1","icon":"","menuname":"数据维护",
 							"menus":[
-									{"menuid":"11","menuname":"用户管理","icon":"icon-exam","url":"../user/list"},
+								<c:if test="${userType == 1}">
+									{"menuid":"11","menuname":"主办方管理","icon":"icon-exam","url":"../user/list"},
 									{"menuid":"12","menuname":"赛事管理","icon":"icon-exam","url":"../game/list"},
+									
 									{"menuid":"13","menuname":"选手管理","icon":"icon-exam","url":"../player/list"}
-								]
+									</c:if>
+									<c:if test="${userType == 2}">
+									{"menuid":"13","menuname":"个人信息管理","icon":"icon-exam","url":"../player/list"}
+									</c:if>
+									]
 						},
 						{"menuid":"2","icon":"","menuname":"信息查询",
 							"menus":[
 									{"menuid":"21","menuname":"赛事查询","icon":"icon-search","url":"../game/list"},
+									<c:if test="${userType == 1}">
 									{"menuid":"22","menuname":"选手查询","icon":"icon-search","url":"../player/list"}
+									</c:if>
 								]
 						},
 						{"menuid":"3","icon":"","menuname":"信息统计",
@@ -37,7 +46,7 @@
 						{"menuid":"4","icon":"","menuname":"系统管理",
 							"menus":[
 							        {"menuid":"41","menuname":"系统设置","icon":"icon-set","url":"SystemServlet?method=toAdminPersonalView"},
-							        {"menuid":"42","menuname":"发布公告","icon":"icon-set","url":"SystemServlet?method=toAdminPersonalView"},
+							        {"menuid":"42","menuname":"公告系统","icon":"icon-set","url":"../notice/list"},
 							        {"menuid":"43","menuname":"密码修改","icon":"icon-set","url":"SystemServlet?method=toAdminPersonalView"}
 								]
 						}
@@ -56,11 +65,11 @@
     <div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
         background:  #7f99be repeat-x center 50%;
         line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
-        <span style="float:right; padding-right:20px;" class="head"><span style="color:red; font-weight:bold;">${user.username}&nbsp;</span>您好&nbsp;&nbsp;&nbsp;<a href="SystemServlet?method=LoginOut" id="loginOut">安全退出</a></span>
+        <span style="float:right; padding-right:20px;" class="head"><span style="color:red; font-weight:bold;">${user.username}&nbsp;</span>您好&nbsp;&nbsp;&nbsp;<a href="login_out" id="loginOut">安全退出</a></span>
         <span style="padding-left:10px; font-size: 16px; ">马拉松赛事信息发布系统</span>
     </div>
     <div region="south" split="true" style="height: 30px; background: #D2E0F2; ">
-        <div class="footer">Copyright &copy; SWU By artisan</div>
+        <div class="footer">Copyright &copy; By tangyh</div>
     </div>
     <div region="west" hide="true" split="true" title="导航菜单" style="width:180px;" id="west">
 	<div id="nav" class="easyui-accordion" fit="true" border="false">

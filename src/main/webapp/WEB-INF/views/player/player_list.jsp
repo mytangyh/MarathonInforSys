@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>赛事列表</title>
+<title>选手列表</title>
 <link rel="stylesheet" type="text/css"
 	href="../easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
@@ -20,18 +20,18 @@
 
 		//datagrid初始化 
 		$('#dataList').datagrid({
-			title : '赛事列表',
+			title : '选手列表',
 			iconCls : 'icon-more',//图标 
 			border : true,
 			collapsible : false,//是否可折叠的 
 			fit : true,//自动大小 
 			method : "post",
 			url : "get_list?t=" + new Date().getTime(),
-			idField : 'game_id',
+			idField : 'player_id',
 			singleSelect : false,//是否单选 
 			pagination : true,//分页控件 
 			rownumbers : true,//行号 
-			sortName : 'game_id',
+			sortName : 'player_id',
 			//sortOrder : 'DESC',
 			sortOrder : 'asc',
 			remoteSort : false,
@@ -40,46 +40,47 @@
 				checkbox : true,
 				width : 50
 			}, {
-				field : 'game_id',
+				field : 'player_id',
 				title : 'ID',
 				width : 50,
 				sortable : true
-			}, {
-				field : 'game_name',
-				title : '赛事名称',
+			},{
+                field : 'player_username',
+                title : '登录用户名',
+                width : 150
+            },
+            {
+                field : 'player_password',
+                title : '登录密码',
+                width : 150
+            }, 
+			{
+				field : 'player_name',
+				title : '姓名',
 				width : 150,
 				sortable : true
 			}, {
-				field : 'game_type',
-				title : '赛事类型',
+				field : 'player_sex',
+				title : '性别',
 				width : 100
 			}, {
-                field : 'game_begintime',
-                title : '起跑时间',
+                field : 'player_birthday',
+                title : '出生日期',
                 width : 150
-            },{
-                field : 'game_endtime',
-                title : '关门时间',
+            }, {
+                field : 'player_email',
+                title : '邮箱',
                 width : 150
-            },{
-                field : 'game_num',
-                title : '赛事规模(人)',
-                width : 100
             },
             {
-                field : 'game_unit',
-                title : '主办单位',
-                width : 100
+                field : 'player_address',
+                title : '地址',
+                width : 150
             },{
-                field : 'game_location',
-                title : '举办地点',
-                width : 100
-            },
-            {
-                field : 'game_remakes',
+                field : 'player_remake',
                 title : '备注',
-                width : 100
-            },
+                width : 150
+            }
 			
 			] ],
 			toolbar : "#toolbar"
@@ -118,9 +119,9 @@
 					} else {
 						var ids = [];
 						$(selectRows).each(function(i, row) {
-							ids[i] = row.game_id;
+							ids[i] = row.player_id;
 						});
-						$.messager.confirm("消息提醒", "将删除与赛事相关的所有数据，确认继续？",
+						$.messager.confirm("消息提醒", "将删除与选手相关的所有数据，确认继续？",
 								function(r) {
 									if (r) {
 										$.ajax({
@@ -156,7 +157,7 @@
 		//设置添加窗口
 		$("#addDialog").dialog(
 				{
-					title : "添加赛事",
+					title : "添加选手",
 					width : 350,
 					height : 500,
 					iconCls : "icon-add",
@@ -182,7 +183,7 @@
 										var data = $("#addForm").serialize();
 										$.ajax({
 											type : "post",
-											url : "addgame",
+											url : "add",
 											data : data,
 											dataType : 'json',
 											success : function(data) {
@@ -193,16 +194,19 @@
 													$("#addDialog").dialog(
 															"close");
 													//清空原表格数据
-													$("#add_gamename").textbox(
-															'setValue', "");
-													$("#add_gamenum").textbox(
-															'setValue', "");
-													$("#add_gameunit").textbox(
-                                                            'setValue', "");
-													$("#add_gamelocation").textbox(
-                                                            'setValue', "");
-													$("#add_gameremakes").textbox(
-                                                            'setValue', "");
+													
+                        $("#add_playername").textbox(
+                                'setValue', "");
+                        $("#add_playersex").textbox(
+                                'setValue', "男");
+                        $("#add_playerbirthday").textbox(
+                                'setValue', "1/1/2000");
+                        $("#add_playeremail").textbox(
+                                'setValue', "");
+                        $("#add_playeraddress").textbox(
+                                'setValue', "");
+                        $("#add_playerremake").textbox(
+                                'setValue', "无");
 													//重新刷新页面数据
 													$('#dataList').datagrid(
 															"reload");
@@ -220,16 +224,18 @@
 								}
 							}, ],
 					onClose : function() {
-						$("#add_gamename").textbox(
+						$("#add_playername").textbox(
                                 'setValue', "");
-                        $("#add_gamenum").textbox(
+                        $("#add_playersex").textbox(
+                                'setValue', "男");
+                        $("#add_playerbirthday").textbox(
+                                'setValue', "1/1/2000");
+                        $("#add_playeremail").textbox(
                                 'setValue', "");
-                        $("#add_gameunit").textbox(
+                        $("#add_playeraddress").textbox(
                                 'setValue', "");
-                        $("#add_gamelocation").textbox(
-                                'setValue', "");
-                        $("#add_gameremakes").textbox(
-                                'setValue', "");
+                        $("#add_playerremake").textbox(
+                                'setValue', "无");
 					}
 				});
 
@@ -296,42 +302,35 @@
 								}
 							}, ],
 					onBeforeOpen : function() {
-						function tfmt(str){//格式化为 月/日/年 时:分
-						    var str1=str.split(" ");
-						    var dat=str1[0].split("-");
-						    var timefm=dat[1].concat("/"+dat[2]+"/"+dat[0]+" "+str1[1]);
-						    return timefm;
-						}
+						
 						var selectRow = $("#dataList").datagrid("getSelected");
 						//设置值
-						$("#edit_id").val(selectRow.game_id);
-						$("#edit_gamename").textbox('setValue',
-								selectRow.game_name);
-						$("#edit_gametype").combobox('setValue',
-								selectRow.game_type);
-						$("#edit_begintime").datetimebox('setValue',
-                               tfmt(selectRow.game_begintime));
-						$("#edit_endtime").datetimebox('setValue',
-                                tfmt(selectRow.game_endtime));
-						$("#edit_gamenum").numberbox('setValue',
-                                selectRow.game_num);
-						$("#edit_gameunit").textbox('setValue',
-                                selectRow.game_unit);
-						$("#edit_gamelocation").textbox('setValue',
-                                selectRow.game_location);
-						$("#edit_gameremakes").textbox('setValue',
-                                selectRow.game_remakes);
+						$("#edit-id").val(selectRow.player_id);
+						$("#edit_playerusername").textbox('setValue',
+								selectRow.player_username);
+						$("#edit_playerusername").textbox('readonly');
+						$("#edit_playerpassword").textbox('setValue',
+                                selectRow.player_password);
+						$("#edit_playername").textbox('setValue',
+                                selectRow.player_name);
+						$("#edit_playersex").combobox('setValue',
+								selectRow.player_sex);
+						$("#edit_playerbirthday").datebox('setValue',
+                               selectRow.player_birthday);
+						$("#edit_playeremail").textbox('setValue',
+                                selectRow.player_email);
+						$("#edit_playeraddress").textbox('setValue',
+                                selectRow.player_address);
+						$("#edit_playerremake").textbox('setValue',
+                                selectRow.player_remake);
 					}
 				});
 
 		//搜索按钮
 		$("#search-btn").click(function() {
 			$('#dataList').datagrid('reload', {
-				game_name:$("#search-gamename").textbox('getValue'),
-				game_type:$("#search-gametype").combobox('getValue'),
-				game_num:$("#search-gamenum").numberbox('getValue'),
-				game_unit:$("#search-gameunit").textbox('getValue'),
-				game_location:$("#search-gamelocation").textbox('getValue')
+				player_username:$("#search-playerusername").textbox('getValue'),
+				
 			});
 		});
 	});
@@ -348,30 +347,24 @@
         <div style="float: left;">
             <a id="add" href="javascript:;" class="easyui-linkbutton"
                 data-options="iconCls:'icon-add',plain:true">添加</a>
-        </div>
+        </div>      
         <div style="float: left;" class="datagrid-btn-separator"></div>
+        </c:if>
         <div style="float: left;">
             <a id="edit" href="javascript:;" class="easyui-linkbutton"
                 data-options="iconCls:'icon-edit',plain:true">修改</a>
         </div>
         <div style="float: left;" class="datagrid-btn-separator"></div>
+        <c:if test="${userType == 1}">
         <div>
             <a id="delete" href="javascript:;" class="easyui-linkbutton"
                 data-options="iconCls:'icon-some-delete',plain:true">删除</a> 
-         </c:if>      
-                名称： <input id="search-gamename" class="easyui-textbox" style="width: 100px" />
-                类型：<select id="search-gametype"  class="easyui-combobox" style="width: 100px;">
-                        <option value="">全部类型</option>
-                            <option value="全程">全程</option>
-                            <option value="半程">半程</option>
-                            <option value="10公里">10公里</option>
-                    </select>
-                    规模： <input id="search-gamenum" class="easyui-numberbox" style="width: 100px" /> 
-             单位： <input id="search-gameunit" class="easyui-textbox" style="width: 100px" /> 
-             地点： <input id="search-gamelocation" class="easyui-textbox" style="width: 100px" />
+               
+                用户名： <input id="search-playerusername" class="easyui-textbox" style="width: 100px" />
             <a id="search-btn" href="javascript:;" class="easyui-linkbutton"
                 data-options="iconCls:'icon-search',plain:true">搜索</a>
         </div>
+        </c:if>
     </div>
 	
 
@@ -380,62 +373,65 @@
 		<form id="addForm" method="post">
 			<table id="addTable" cellpadding="8">
 				<tr>
-					<td>赛事名称:</td>
-					<td><input id="add_gamename" class="easyui-textbox"
-						style="width: 200px; height: 30px;" type="text" name="game_name"
-						data-options="required:true, missingMessage:'请填写赛事名称'" /></td>
+                    <td>登录用户名:</td>
+                    <td><input id="add_playerusername" 
+                        style="width: 200px; height: 30px;" class="easyui-textbox"
+                        type="text" name="player_username"  data-options="required:true, missingMessage:'请填写用户名'" /></td>
+                </tr>
+                <tr>
+                    <td>登录密码:</td>
+                    <td><input id="add_playerpassword" type="text" 
+                        style="width: 200px; height: 30px;" class="easyui-textbox"
+                         name="player_password" data-options="required:true, missingMessage:'请填写密码'" /></td>
+                </tr>
+				
+				<tr>
+					<td>姓名:</td>
+					<td><input id="add_playername" class="easyui-textbox"
+						style="width: 200px; height: 30px;" type="text" name="player_name"
+						 data-options="required:false" /></td>
 				</tr>
 
 				<tr>
-					<td>赛事类型:</td>
-					<td><select class="easyui-combobox" name="game_type"
-						id="add_gametype" data-options="editable:false,panelHeight:'auto'"
+					<td>性别:</td>
+					<td><select class="easyui-combobox" name="player_sex"
+						id="add_playersex" data-options="editable:false,panelHeight:'auto'"
 						style="width: 200px;">
-							<option value="全程">全程</option>
-							<option value="半程">半程</option>
-							<option value="10公里">10公里</option>
+							<option value="男">男</option>
+							<option value="女">女</option>
+							
 					</select></td>
 				</tr>
+				
 				<tr>
-					<td>起跑时间：</td>
-					<td><input class="easyui-datetimebox" name="game_begintime"
-						id="add_begintime" data-options="required:true,showSeconds:false"
-						value="${notices.release_time}" style="width: 200px"></td>
+					<td>出生日期：</td>
+					<td><input class="easyui-datebox" name="player_birthday"
+						id="add_birthday" data-options="required:true,showSeconds:false"
+						value="1/1/2000" style="width: 200px"></td>
 				</tr>
+				
 				<tr>
-					<td>关门时间：</td>
-					<td><input class="easyui-datetimebox" name="game_endtime"
-						id="add_endtime" data-options="required:true,showSeconds:false"
-						value="${notices.release_time}" style="width: 200px"></td>
-				</tr>
-				<tr>
-					<td>赛事规模:</td>
-					<td><input id="add_gamenum" type="text" name="game_num"
-						class="easyui-numberbox" value="1000"
-						style="width: 200px; height: 30px;"
-						data-options="min:0,required:true, missingMessage:'请填写赛事规模(单位：人)'">
+					<td>邮箱:</td>
+					<td><input id="add_playeremail" type="text" name="player_email"
+						class="easyui-textbox" 
+						style="width: 200px; height: 30px;"data-options="required:false" 
+						>
 					</td>
 				</tr>
 				<tr>
 				<tr>
-					<td>主办单位:</td>
-					<td><input id="add_gameunit"
+					<td>地址:</td>
+					<td><input id="add_playeraddress"
 						style="width: 200px; height: 30px;" class="easyui-textbox"
-						type="text" name="game_unit"
-						data-options="required:true, missingMessage:'请填写主办单位'" /></td>
+						type="text" name="player_address" data-options="required:false" 
+						 /></td>
 				</tr>
-				<tr>
-					<td>比赛地点:</td>
-					<td><input id="add_gamelocation"
-						style="width: 200px; height: 30px;" class="easyui-textbox"
-						type="text" name="game_location"
-						data-options="required:true, missingMessage:'请填写比赛地点'" /></td>
-				</tr>
+				
 				<tr>
 					<td>备注:</td>
-					<td><input id="add_gameremakes" value="无"
+					<td><input id="add_playerremake" value="无"
 						style="width: 200px; height: 30px;" class="easyui-textbox"
-						type="text" name="game_remakes" data-options="required:false" /></td>
+						type="text" name="player_remake" data-options="required:false" /></td>
 				</tr>
 			</table>
 		</form>
@@ -445,65 +441,68 @@
 	<!-- 修改窗口 -->
 	<div id="editDialog" style="padding: 10px">
 		<form id="editForm" method="post">
-			<input type="hidden" name="game_id" id="edit_id">
+			<input type="hidden" name="player_id" id="edit-id">
 			<table id="editTable" border=0 cellpadding="8">
 				<tr>
-                    <td>赛事名称:</td>
-                    <td><input id="edit_gamename" class="easyui-textbox"
-                        style="width: 200px; height: 30px;" type="text" name="game_name"
-                        data-options="required:true, missingMessage:'请填写赛事名称'" /></td>
+                    <td>登录用户名:</td>
+                    <td><input id="edit_playerusername" 
+                        style="width: 200px; height: 30px;" class="easyui-textbox"
+                        type="text" name="player_username"  data-options="required:true, missingMessage:'请填写用户名'" /></td>
+                </tr>
+                <tr>
+                    <td>登录密码:</td>
+                    <td><input id="edit_playerpassword" type="text" 
+                        style="width: 200px; height: 30px;" class="easyui-textbox"
+                         name="player_password" data-options="required:true, missingMessage:'请填写密码'" /></td>
+                </tr>
+                
+                <tr>
+                    <td>姓名:</td>
+                    <td><input id="edit_playername" class="easyui-textbox"
+                        style="width: 200px; height: 30px;" type="text" name="player_name"
+                         data-options="required:false" /></td>
                 </tr>
 
                 <tr>
-                    <td>赛事类型:</td>
-                    <td><select class="easyui-combobox" name="game_type"
-                        id="edit_gametype" data-options="editable:false,panelHeight:'auto'"
+                    <td>性别:</td>
+                    <td><select class="easyui-combobox" name="player_sex"
+                        id="edit_playersex" data-options="editable:false,panelHeight:'auto'"
                         style="width: 200px;">
-                            <option value="全程">全程</option>
-                            <option value="半程">半程</option>
-                            <option value="10公里">10公里</option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                            
                     </select></td>
                 </tr>
+                
                 <tr>
-                    <td>起跑时间：</td>
-                    <td><input class="easyui-datetimebox" name="game_begintime"
-                        id="edit_begintime" data-options="required:true,showSeconds:false"
+                    <td>出生日期：</td>
+                    <td><input class="easyui-datebox" name="player_birthday"
+                        id="edit_playerbirthday" data-options="required:true,showSeconds:false"
                          style="width: 200px"></td>
                 </tr>
+                
                 <tr>
-                    <td>关门时间：</td>
-                    <td><input class="easyui-datetimebox" name="game_endtime"
-                        id="edit_endtime" data-options="required:true,showSeconds:false"
-                        style="width: 200px"></td>
-                </tr>
-                <tr>
-                    <td>赛事规模:</td>
-                    <td><input id="edit_gamenum" type="text" name="game_num"
-                        class="easyui-numberbox" value="1000"
-                        style="width: 200px; height: 30px;"
-                        data-options="min:0,required:true, missingMessage:'请填写赛事规模(单位：人)'">
+                    <td>邮箱:</td>
+                    <td><input id="edit_playeremail" type="text" name="player_email"
+                        class="easyui-textbox" 
+                        style="width: 200px; height: 30px;"data-options="required:false" 
+                        >
                     </td>
                 </tr>
                 <tr>
                 <tr>
-                    <td>主办单位:</td>
-                    <td><input id="edit_gameunit"
+                    <td>地址:</td>
+                    <td><input id="edit_playeraddress"
                         style="width: 200px; height: 30px;" class="easyui-textbox"
-                        type="text" name="game_unit"
-                        data-options="required:true, missingMessage:'请填写主办单位'" /></td>
+                        type="text" name="player_address" data-options="required:false" 
+                         /></td>
                 </tr>
-                <tr>
-                    <td>比赛地点:</td>
-                    <td><input id="edit_gamelocation"
-                        style="width: 200px; height: 30px;" class="easyui-textbox"
-                        type="text" name="game_location"
-                        data-options="required:true, missingMessage:'请填写比赛地点'" /></td>
-                </tr>
+                
                 <tr>
                     <td>备注:</td>
-                    <td><input id="edit_gameremakes"
+                    <td><input id="edit_playerremake" value="无"
                         style="width: 200px; height: 30px;" class="easyui-textbox"
-                        type="text" name="game_remakes" data-options="required:false" /></td>
+                        type="text" name="player_remake" data-options="required:false" /></td>
                 </tr>
 			</table>
 		</form>
