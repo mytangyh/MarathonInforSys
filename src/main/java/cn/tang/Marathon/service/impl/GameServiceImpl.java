@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import cn.tang.Marathon.dao.GameDao;
 import cn.tang.Marathon.pojo.Game;
+import cn.tang.Marathon.pojo.Stats;
 import cn.tang.Marathon.service.GameService;
 
 /**
@@ -59,6 +60,12 @@ public class GameServiceImpl implements GameService {
 	public int deleteGame(Long[] ids) {
 		// TODO Auto-generated method stub
 		return gameDao.deleteGame(ids);
+	}
+
+	@Override
+	public Stats getStats() {
+		// TODO Auto-generated method stub
+		return gameDao.getStats();
 	}
 
 }

@@ -20,8 +20,11 @@
 							"menus":[
 								<c:if test="${userType == 1}">
 									{"menuid":"11","menuname":"主办方管理","icon":"icon-exam","url":"../user/list"},
+									</c:if>
+									<c:if test="${userType == 1||userType == 3}">
 									{"menuid":"12","menuname":"赛事管理","icon":"icon-exam","url":"../game/list"},
-									
+									</c:if>
+									<c:if test="${userType == 1}">
 									{"menuid":"13","menuname":"选手管理","icon":"icon-exam","url":"../player/list"}
 									</c:if>
 									<c:if test="${userType == 2}">
@@ -39,15 +42,15 @@
 						},
 						{"menuid":"3","icon":"","menuname":"信息统计",
 							"menus":[
-									{"menuid":"31","menuname":"图表显示","icon":"icon-user-teacher","url":"TeacherServlet?method=toTeacherListView"},
+									{"menuid":"31","menuname":"图表显示","icon":"icon-user-teacher","url":"../stats/show"}
 								]
 						},
 					
 						{"menuid":"4","icon":"","menuname":"系统管理",
 							"menus":[
-							        {"menuid":"41","menuname":"系统设置","icon":"icon-set","url":"SystemServlet?method=toAdminPersonalView"},
+							      
 							        {"menuid":"42","menuname":"公告系统","icon":"icon-set","url":"../notice/list"},
-							        {"menuid":"43","menuname":"密码修改","icon":"icon-set","url":"SystemServlet?method=toAdminPersonalView"}
+							        {"menuid":"43","menuname":"密码修改","icon":"icon-set","url":"../editpw/show"}
 								]
 						}
 				]};

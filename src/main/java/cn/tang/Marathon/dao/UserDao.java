@@ -22,4 +22,5 @@ public interface UserDao {
 	public int getTotal(Map<String,Object> queryMap);
 	public int edit(User user);
 	public int delete(Long[] ids);
+	public int edit_pwd(User user);
 }

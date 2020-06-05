@@ -11,5 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where username=#{username}
 
 	</select>
-	
+	<update id="edit_pwd" parameterType="Admin">
+        update admin_login set password=#{password} where username=#{username}
+    </update>
 </mapper>

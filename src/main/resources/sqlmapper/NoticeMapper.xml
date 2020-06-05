@@ -15,4 +15,17 @@ select * from notice
         select count(notice_id)
         from notice
     </select>
+    <update id="add" parameterType="Notice">
+        insert into
+        notice(notice_id,notice_time,notice_text)
+        values(null,#{notice_time},#{notice_text})
+    </update>
+    <update id="delete" parameterType="long">
+        delete from notice
+        where notice_id in
+        <foreach item="ids" collection="array" open="(" separator=","
+            close=")">
+            #{ids}
+        </foreach>
+    </update>
 </mapper>

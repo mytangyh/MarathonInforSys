@@ -63,4 +63,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{ids}
         </foreach>
     </update>
+    <select id="getStats" resultType="Stats">
+    SELECT
+SUM(CASE WHEN game_type = '全程' THEN 1 ELSE 0 END) AS quan,
+SUM(CASE WHEN game_type = '半程' THEN 1 ELSE 0 END) AS ban,
+SUM(CASE WHEN game_type = '10公里' THEN 1 ELSE 0 END) AS ten
+FROM game_inf
+    </select>
 </mapper>

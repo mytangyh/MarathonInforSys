@@ -19,4 +19,6 @@ public interface NoticeService {
 	public List<Notice> findAll();
 	public List<Notice> findList(Map<String,Object> queryMap);
 	public int getTotal(Map<String,Object> queryMap);
+	public int add(Notice notice);
+	public int delete(Long[] ids);
 }

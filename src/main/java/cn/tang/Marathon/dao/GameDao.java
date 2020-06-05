@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import cn.tang.Marathon.pojo.Game;
+import cn.tang.Marathon.pojo.Stats;
 
 /**
  * @author Tang
@@ -23,4 +24,5 @@ public int deleteGame(Long[] ids);
 public List<Game> findList(Map<String,Object> queryMap);
 public List<Game> findAll();
 public int getTotal(Map<String,Object> queryMap);
+public Stats getStats();
 }

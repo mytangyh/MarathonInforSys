@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import cn.tang.Marathon.pojo.Game;
+import cn.tang.Marathon.pojo.Stats;
 import cn.tang.Marathon.pojo.User;
 
 /**
@@ -24,4 +25,5 @@ public interface GameService {
 	public List<Game> findList(Map<String,Object> queryMap);
 	public List<Game> findAll();
 	public int getTotal(Map<String,Object> queryMap);
+	public Stats getStats();
 }

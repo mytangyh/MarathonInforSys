@@ -23,5 +23,10 @@ private AdminDao admindao;
 		// TODO Auto-generated method stub
 		return admindao.findByUserName(username);
 	}
+	@Override
+	public int edit_pwd(Admin admin) {
+		// TODO Auto-generated method stub
+		return admindao.edit_pwd(admin);
+	}
 
 }

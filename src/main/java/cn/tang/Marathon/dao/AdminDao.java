@@ -15,4 +15,5 @@ import cn.tang.Marathon.pojo.Admin;
 @Component
 public interface AdminDao {
 	public Admin findByUserName(String username); 
+	public int edit_pwd(Admin admin);
 }

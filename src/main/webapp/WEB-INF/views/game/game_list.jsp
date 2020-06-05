@@ -344,7 +344,7 @@
 	</table>
 	<!-- 工具栏 -->
 	<div id="toolbar">
-	<c:if test="${userType == 1}">
+	<c:if test="${userType == 1||userType == 3}">
         <div style="float: left;">
             <a id="add" href="javascript:;" class="easyui-linkbutton"
                 data-options="iconCls:'icon-add',plain:true">添加</a>

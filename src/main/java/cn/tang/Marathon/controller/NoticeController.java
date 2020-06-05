@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.tang.Marathon.page.Page;
+import cn.tang.Marathon.pojo.Notice;
 import cn.tang.Marathon.pojo.User;
 import cn.tang.Marathon.service.NoticeService;
 import cn.tang.Marathon.service.UserService;
@@ -45,6 +46,44 @@ public class NoticeController {
 		return ret;
 		
 	}
-	
-	
+	@RequestMapping(value = "/add",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> add(Notice notice) {
+		Map<String, String> ret=new HashMap<String, String>();
+		if (notice==null) {
+			ret.put("type", "error");
+			ret.put("msg", "数据绑定出错，请联系开发人员！");
+			return ret;
+		}
+		if (noticeService.add(notice)<=0) {
+			ret.put("type", "error");
+			ret.put("msg", "添加失败");
+			return ret;
+		}
+		ret.put("type", "success");
+		ret.put("msg", "添加成功");
+		
+		return ret;
+		}
+	@RequestMapping(value = "/delete",method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> delete(
+			@RequestParam(value = "ids[]",required = true) Long[] ids) {
+		Map<String, String> ret=new HashMap<String, String>();
+		
+		if (ids ==null) {
+			ret.put("type", "error");
+			ret.put("msg", "请选择要删除的数据！");
+			return ret;
+		}
+		if (noticeService.delete(ids)<=0) {
+			ret.put("type", "error");
+			ret.put("msg", "删除失败");
+			return ret;
+		}
+		ret.put("type", "success");
+		ret.put("msg", "删除成功");
+		return ret;
+		
+	}
 }

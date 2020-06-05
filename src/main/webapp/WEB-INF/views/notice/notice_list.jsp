@@ -89,7 +89,7 @@
 					} else {
 						var ids = [];
 						$(selectRows).each(function(i, row) {
-							ids[i] = row.id;
+							ids[i] = row.notice_id;
 						});
 						$.messager.confirm("消息提醒", "将删除与该公告的所有数据，确认继续？",
 								function(r) {
@@ -282,11 +282,11 @@
 				data-options="iconCls:'icon-add',plain:true">添加</a>
 		</div>
 		<div style="float: left;" class="datagrid-btn-separator"></div>
-		<div style="float: left;">
+		<!-- <div style="float: left;">
 			<a id="edit" href="javascript:;" class="easyui-linkbutton"
 				data-options="iconCls:'icon-edit',plain:true">修改</a>
 		</div>
-		<div style="float: left;" class="datagrid-btn-separator"></div>
+		<div style="float: left;" class="datagrid-btn-separator"></div> -->
 		<div>
 			<a id="delete" href="javascript:;" class="easyui-linkbutton"
 				data-options="iconCls:'icon-some-delete',plain:true">删除</a> 

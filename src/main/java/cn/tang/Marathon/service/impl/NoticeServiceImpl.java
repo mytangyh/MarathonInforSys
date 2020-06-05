@@ -40,4 +40,16 @@ private NoticeDao noticeDao;
 		return noticeDao.getTotal(queryMap);
 	}
 
+	@Override
+	public int add(Notice notice) {
+		// TODO Auto-generated method stub
+		return noticeDao.add(notice);
+	}
+
+	@Override
+	public int delete(Long[] ids) {
+		// TODO Auto-generated method stub
+		return noticeDao.delete(ids);
+	}
+
 }

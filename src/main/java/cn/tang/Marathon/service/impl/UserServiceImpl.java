@@ -51,5 +51,10 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userDao.delete(ids);
 	}
+	@Override
+	public int edit_pwd(User user) {
+		// TODO Auto-generated method stub
+		return userDao.edit_pwd(user);
+	}
 
 }
