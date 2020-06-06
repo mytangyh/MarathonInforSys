@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.tang.Marathon.pojo.Admin;
+import cn.tang.Marathon.pojo.Player;
 import cn.tang.Marathon.pojo.PlayerLogin;
 import cn.tang.Marathon.pojo.User;
 import cn.tang.Marathon.service.AdminService;
@@ -167,7 +168,69 @@ public class SystemController {
 		return ret;
 
 	}
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public ModelAndView register(ModelAndView model) {
+		model.setViewName("system/register");
 
+		return model;
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> register(
+
+			@RequestParam(value = "username", required = true) String username,
+			@RequestParam(value = "password", required = true) String password,
+			@RequestParam(value = "vcode", required = true) String vcode,
+			@RequestParam(value = "type", required = true) int type,HttpServletRequest request) {
+
+		Map<String, String> ret = new HashMap<String, String>();
+
+		if (StringUtils.isEmpty(username)) {
+			ret.put("type", "error");
+			ret.put("msg", "用户名不能为空");
+			return ret;
+		}
+		if (StringUtils.isEmpty(password)) {
+			ret.put("type", "error");
+			ret.put("msg", "密码不能为空");
+			return ret;
+		}
+		if (StringUtils.isEmpty(vcode)) {
+			ret.put("type", "error");
+			ret.put("msg", "验证码不能为空");
+			return ret;
+		}
+		String loginCpacha = (String) request.getSession().getAttribute("loginCpacha");
+		
+		if (!vcode.toUpperCase().equals(loginCpacha.toUpperCase())) {//转为大写判断是否相同
+			ret.put("type", "error");
+			ret.put("msg", "验证码错误！");
+			return ret;
+		}
+		request.getSession().setAttribute("loginCpacha", null);
+		 PlayerLogin reg = playerService.findByUserName(username);
+		 
+		if (reg!=null) {
+			ret.put("type", "error");
+			ret.put("msg", "用户名已存在！");
+			return ret;
+		}
+		PlayerLogin pLogin = new PlayerLogin();
+		pLogin.setPlayer_username(username);
+		pLogin.setPlayer_password(password);
+		Player playerIn = new Player();
+		int addPlayer = playerService.addPlayer(pLogin, playerIn);
+		if (addPlayer<=0) {
+			ret.put("type", "error");
+			ret.put("msg", "注册失败！");
+			return ret;
+		}
+		ret.put("type", "success");
+		ret.put("msg", "注册成功！");
+		return ret;
+		
+	}
 	/**
 	 * 验证码
 	 * 

@@ -27,6 +27,7 @@
 			<mvc:mapping path="/**" />
 			<!--<mvc:mapping path="/grade/*"/> -->
 			<mvc:exclude-mapping path="/system/login" />
+			<mvc:exclude-mapping path="/system/register" />
 			<mvc:exclude-mapping path="/system/get_cpacha" />
 			<mvc:exclude-mapping path="/h-ui/**" />
 			<mvc:exclude-mapping path="/easyui/**" />

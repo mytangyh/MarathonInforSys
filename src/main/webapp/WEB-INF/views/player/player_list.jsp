@@ -49,11 +49,13 @@
                 title : '登录用户名',
                 width : 150
             },
+            
             {
                 field : 'player_password',
                 title : '登录密码',
                 width : 150
             }, 
+            
 			{
 				field : 'player_name',
 				title : '姓名',
@@ -449,13 +451,14 @@
                         style="width: 200px; height: 30px;" class="easyui-textbox"
                         type="text" name="player_username"  data-options="required:true, missingMessage:'请填写用户名'" /></td>
                 </tr>
+                
                 <tr>
                     <td>登录密码:</td>
-                    <td><input id="edit_playerpassword" type="text" 
+                    <td><input id="edit_playerpassword" type="password" 
                         style="width: 200px; height: 30px;" class="easyui-textbox"
                          name="player_password" data-options="required:true, missingMessage:'请填写密码'" /></td>
                 </tr>
-                
+               
                 <tr>
                     <td>姓名:</td>
                     <td><input id="edit_playername" class="easyui-textbox"

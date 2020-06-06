@@ -28,4 +28,5 @@ public interface PlayerDao {
 	public int deleteLogin(Long[] ids);
 	public int deleteInf(Long[] ids);
 	public List<Player> findAll();
+	
 }

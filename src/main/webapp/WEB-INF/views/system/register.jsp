@@ -36,12 +36,13 @@
 			var data = $("#form").serialize();
 			$.ajax({
 				type: "post",
-				url: "login",
+				url: "register",
 				data: data, 
 				dataType: "json", //返回数据类型
 				success: function(data){
 					if("success" == data.type ){
-						window.location.href = "index";
+						$.messager.alert("消息提醒", data.msg, "warning");
+						window.location.href = "login";
 					} else {
 						$.messager.alert("消息提醒", data.msg, "warning");
 						$("#vcodeImg").click();//切换验证码
@@ -59,7 +60,7 @@
 		});
 	})
 </script> 
-<title>登录|马拉松赛事信息发布系统</title>
+<title>注册|马拉松赛事信息发布系统</title>
 <meta name="keywords" content="马拉松赛事信息发布系统">
 </head>
 <body>
@@ -73,7 +74,7 @@
       <div class="row cl">
         <label class="form-label col-3"><i class="Hui-iconfont">&#xe60d;</i></label>
         <div class="formControls col-8">
-          <input id="username" name="username" type="text" v placeholder="账户" class="input-text size-L">
+          <input id="username" name="username" type="text"  placeholder="账户" class="input-text size-L">
         </div>
       </div>
       <div class="row cl">
@@ -89,25 +90,17 @@
       </div>
       
       <div class="mt-20 skin-minimal" style="text-align: center;">
-      <div class="radio-box">
-            <input type="radio" id="radio-3" name="type" checked value="1" />
-            <label for="radio-3">管理员</label>
-        </div>
+    
 		<div class="radio-box">
-			<input type="radio" id="radio-2" name="type"  value="2" />
+			<input type="radio" id="radio-2" name="type" checked="checked" value="2" />
 			<label for="radio-1">选手</label>
 		</div>
 		
-		<div class="radio-box">
-			<input type="radio" id="radio-1" name="type"  value="3" />
-			<label for="radio-3">主办方</label>
-		</div>
 	</div>
       
       <div class="row">
         <div class="formControls col-8 col-offset-3">
-          <input id="submitBtn" type="button" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">&nbsp;&nbsp;&nbsp;&nbsp;还没有账号？<a href="register">立即注册</a>
-         
+          <input id="submitBtn" type="button" class="btn btn-success radius size-L" value="&nbsp;注&nbsp;&nbsp;&nbsp;&nbsp;册&nbsp;">&nbsp;&nbsp;&nbsp;&nbsp;已有账号？<a href="login">立即登录</a>
         </div>
       </div>
     </form>
